@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RocketIP - Pesquisa local de legislações, normativos e documentos legais de Propriedade Intelectual.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.sheetjs.com; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <title>RocketIP</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script defer src="js/search-core.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#searchInput">Pular para a pesquisa</a>
+
+  <main class="page-shell" aria-labelledby="appTitle">
+    <section class="hero" id="homeSection">
+      <div class="brand" aria-label="Marca RocketIP">
+        <img src="assets/Marca.png" alt="RocketIP" id="brandImage">
+        <div class="brand-placeholder" id="brandPlaceholder" hidden>[INSERIR MARCA AQUI]</div>
+      </div>
+
+      <h1 id="appTitle" class="visually-hidden">RocketIP</h1>
+      <p class="tagline">Pesquisa local em legislações, normativos e documentos legais de Propriedade Intelectual.</p>
+
+      <form class="search-form" id="searchForm" role="search" autocomplete="off">
+        <label class="visually-hidden" for="searchInput">Digite o termo, número, data, descrição ou link a pesquisar</label>
+        <input id="searchInput" name="q" type="search" inputmode="search" placeholder="Pesquisar legislação, normativo, número, data ou palavra-chave" aria-describedby="searchHelp" required>
+        <button type="submit" id="searchButton">Pesquisar</button>
+      </form>
+      <p id="searchHelp" class="help-text">Carregue uma planilha .xlsx e pesquise em todas as colunas das abas Legislações e Normativos.</p>
+
+      <section class="upload-panel" aria-labelledby="uploadTitle">
+        <div class="upload-header">
+          <div>
+            <h2 id="uploadTitle">Base de dados</h2>
+            <p>O arquivo é lido no seu navegador. Ele não é enviado para servidor do RocketIP.</p>
+          </div>
+          <button type="button" class="secondary-button" id="clearDatabaseButton">Limpar base salva</button>
+        </div>
+
+        <label class="file-drop" for="excelFileInput" id="fileDropArea">
+          <span class="file-drop-title">Carregar ou substituir arquivo Excel</span>
+          <span class="file-drop-subtitle">Selecione um arquivo .xlsx com as abas Legislações e Normativos.</span>
+          <input id="excelFileInput" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        </label>
+
+        <div class="database-summary" id="databaseSummary" aria-live="polite">Nenhuma base carregada.</div>
+        <div class="status-box" id="statusBox" role="status" aria-live="polite" hidden></div>
+      </section>
+    </section>
+
+    <section class="results-section" id="resultsSection" aria-labelledby="resultsTitle" hidden>
+      <div class="results-toolbar">
+        <div>
+          <h2 id="resultsTitle">Resultados</h2>
+          <p id="resultsCount" class="results-count"></p>
+        </div>
+        <div class="toolbar-controls">
+          <label for="originFilter">Filtrar por origem</label>
+          <select id="originFilter">
+            <option value="Todos">Todos</option>
+            <option value="Legislações">Legislações</option>
+            <option value="Normativos">Normativos</option>
+          </select>
+          <button type="button" class="secondary-button" id="backHomeButton">Voltar à página inicial</button>
+        </div>
+      </div>
+
+      <div class="results-list" id="resultsList"></div>
+
+      <div class="load-more-wrapper" id="loadMoreWrapper" hidden>
+        <button type="button" class="secondary-button" id="loadMoreButton">Carregar mais resultados</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="copyright-notice">
+    Confidential and proprietary information. Unauthorized distribution is prohibited. © 2026 Pedro Moreira.
+  </footer>
+
+  <noscript>
+    <div class="noscript-warning">Este aplicativo precisa de JavaScript ativado para ler a planilha e executar as buscas.</div>
+  </noscript>
+</body>
+</html>
