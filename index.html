@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="RocketIP - Pesquisa local de legislações, normativos e documentos legais de Propriedade Intelectual.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.sheetjs.com; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.sheetjs.com; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
   <title>RocketIP</title>
   <link rel="stylesheet" href="css/styles.css">
   <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -29,24 +29,24 @@
         <input id="searchInput" name="q" type="search" inputmode="search" placeholder="Pesquisar legislação, normativo, número, data ou palavra-chave" aria-describedby="searchHelp" required>
         <button type="submit" id="searchButton">Pesquisar</button>
       </form>
-      <p id="searchHelp" class="help-text">Carregue uma planilha .xlsx e pesquise em todas as colunas das abas Legislações e Normativos.</p>
+      <p id="searchHelp" class="help-text">A base de dados é carregada automaticamente a partir do arquivo Excel publicado no repositório.</p>
 
       <section class="upload-panel" aria-labelledby="uploadTitle">
         <div class="upload-header">
           <div>
             <h2 id="uploadTitle">Base de dados</h2>
-            <p>O arquivo é lido no seu navegador. Ele não é enviado para servidor do RocketIP.</p>
+            <p>O arquivo Excel publicado no repositório é lido automaticamente pelo navegador.</p>
           </div>
-          <button type="button" class="secondary-button" id="clearDatabaseButton">Limpar base salva</button>
+          <button type="button" class="secondary-button" id="clearDatabaseButton" hidden>Limpar base salva</button>
         </div>
 
-        <label class="file-drop" for="excelFileInput" id="fileDropArea">
+        <label class="file-drop" for="excelFileInput" id="fileDropArea" hidden>
           <span class="file-drop-title">Carregar ou substituir arquivo Excel</span>
           <span class="file-drop-subtitle">Selecione um arquivo .xlsx com as abas Legislações e Normativos.</span>
           <input id="excelFileInput" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
         </label>
 
-        <div class="database-summary" id="databaseSummary" aria-live="polite">Nenhuma base carregada.</div>
+        <div class="database-summary" id="databaseSummary" aria-live="polite">Carregando base publicada...</div>
         <div class="status-box" id="statusBox" role="status" aria-live="polite" hidden></div>
       </section>
     </section>

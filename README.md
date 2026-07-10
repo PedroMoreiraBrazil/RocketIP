@@ -343,3 +343,17 @@ Sempre envie os arquivos atuais do projeto quando pedir alteração.
 - [ ] O botão “Voltar à página inicial” funciona.
 - [ ] A interface funciona em computador e celular.
 - [ ] A planilha confidencial não foi publicada junto com o site.
+
+
+## Versão com base publicada no repositório
+
+Esta versão foi ajustada para carregar automaticamente o arquivo `data/base_rocketip.xlsx`.
+
+Para atualizar a base:
+
+1. Abra a pasta `data`.
+2. Substitua o arquivo `base_rocketip.xlsx` por outro arquivo com o mesmo nome.
+3. Faça commit no GitHub.
+4. Aguarde alguns minutos para o GitHub Pages atualizar o site.
+
+Atenção: se o repositório ou o site for público, o arquivo Excel também ficará acessível publicamente.

@@ -2,6 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "rocketip.database.v1";
+  const DEFAULT_DATABASE_URL = "data/base_rocketip.xlsx";
   const PAGE_SIZE = 10;
 
   const core = window.RocketIPCore;
@@ -37,7 +38,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     setupBrandFallback();
     setupEvents();
-    restoreSavedDatabase();
+    loadPublishedDatabase();
   });
 
   function setupBrandFallback() {
@@ -82,6 +83,74 @@
       if (file) handleFile(file);
     });
   }
+
+  async function loadPublishedDatabase() {
+    if (!window.XLSX) {
+      showStatus("error", "Biblioteca de Excel não carregada", [
+        "A leitura do arquivo .xlsx depende da biblioteca SheetJS.",
+        "Verifique a conexão com a internet e recarregue a página."
+      ]);
+      updateDatabaseSummary();
+      return;
+    }
+
+    showStatus("warning", "Carregando base publicada", [
+      `Lendo o arquivo ${DEFAULT_DATABASE_URL}. Aguarde alguns segundos.`
+    ]);
+
+    try {
+      const response = await fetch(DEFAULT_DATABASE_URL, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Arquivo não encontrado ou inacessível. Código HTTP: ${response.status}`);
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      const workbook = window.XLSX.read(arrayBuffer, {
+        type: "array",
+        cellDates: true,
+        cellNF: true,
+        cellText: false
+      });
+
+      const result = core.validateAndConvertWorkbook(workbook, { XLSX: window.XLSX });
+
+      if (result.errors.length) {
+        state.records = [];
+        state.metadata = null;
+        state.warnings = [];
+        updateDatabaseSummary();
+        showStatus("error", "A planilha publicada possui problemas que impedem o carregamento", result.errors);
+        return;
+      }
+
+      state.records = result.records;
+      state.metadata = {
+        ...result.metadata,
+        fileName: DEFAULT_DATABASE_URL
+      };
+      state.warnings = result.warnings;
+      updateDatabaseSummary();
+
+      const successMessages = [`${result.records.length} registros carregados com sucesso.`];
+      if (result.warnings.length) {
+        successMessages.push(`${result.warnings.length} aviso(s) encontrado(s). A busca continuará funcionando, mas revise a planilha.`);
+        successMessages.push(...result.warnings.slice(0, 10));
+        if (result.warnings.length > 10) successMessages.push("Há avisos adicionais na planilha publicada.");
+      }
+      showStatus(result.warnings.length ? "warning" : "success", "Base publicada carregada", successMessages);
+    } catch (error) {
+      state.records = [];
+      state.metadata = null;
+      state.warnings = [];
+      updateDatabaseSummary();
+      showStatus("error", "Não foi possível carregar a base publicada", [
+        `Confirme se o arquivo existe exatamente em: ${DEFAULT_DATABASE_URL}`,
+        "Confirme se o site foi aberto pelo GitHub Pages, e não diretamente por duplo clique no arquivo index.html.",
+        `Detalhe técnico: ${error.message}`
+      ]);
+    }
+  }
+
 
   function restoreSavedDatabase() {
     try {
@@ -205,8 +274,10 @@
     const query = elements.searchInput.value.trim();
 
     if (!state.records.length) {
-      showStatus("warning", "Carregue a base de dados", ["Selecione a planilha .xlsx antes de pesquisar."]);
-      elements.excelFileInput.focus();
+      showStatus("warning", "Base ainda não disponível", [
+        "Aguarde o carregamento automático da base publicada e tente novamente.",
+        `Se o problema continuar, confirme se o arquivo existe em ${DEFAULT_DATABASE_URL}.`
+      ]);
       return;
     }
 
